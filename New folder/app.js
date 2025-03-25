@@ -8,7 +8,7 @@ const port = 3000;
 app.use(express.json());
 
 // PostgreSQL connection string
-const connectionString = 'postgresql://user:password@hostname:5432/gameshop_noik';
+const connectionString = 'postgresql://root:cV2m43BQuIpK23w1ohu79PdXZo1P7EVl@dpg-cv9a5bl2ng1s73d2492g-a.oregon-postgres.render.com/abdullah_e3jb';
 
 // Set up the PostgreSQL connection pool using the connection string
 const pool = new Pool({
@@ -19,17 +19,17 @@ const pool = new Pool({
 });
 
 // POST route to insert a new user
-app.post('/messages', async (req, res) => {
-    const { name, email, message } = req.body;
+app.post('/contacts', async (req, res) => {
+    const { name, email, phonenumber, message } = req.body;
 
-    if (!name || !email || !message) {
+    if (!name || !email || !message ||!phonenumber) {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
     try {
         const result = await pool.query(
-            'INSERT INTO messages (name, email, message) VALUES ($1, $2, $3) RETURNING *',
-            [name, email, message]
+            'INSERT INTO contacts (name, email, phonenumber, message) VALUES ($1, $2, $3, $4) RETURNING *',
+            [name, email,phonenumber, message]
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
